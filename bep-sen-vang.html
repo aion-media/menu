@@ -906,7 +906,7 @@
             <!-- Row layout: Image left strictly 4:3, details right -->
             <div class="flex items-start gap-3">
               <!-- Left: 4:3 Thumbnail optimized preview -->
-              <div class="relative w-28 flex-shrink-0">
+              <div class="relative w-24 sm:w-28 flex-shrink-0">
                 <div class="aspect-4-3 w-full overflow-hidden rounded-xl bg-stone-100">
                   <img 
                     src="${item.image}" 
@@ -922,11 +922,11 @@
               <div class="flex-1 min-w-0">
                 <!-- Translated Name & Price Header (Full name visible, no truncation) -->
                 <div class="flex items-start justify-between gap-2">
-                  <h3 class="font-bold text-[14px] leading-snug" style="color: var(--theme-text-main);">
+                  <h3 class="font-bold text-[13.5px] sm:text-[14px] leading-snug" style="color: var(--theme-text-main);">
                     ${trans.name}
                   </h3>
                   <span 
-                    class="font-extrabold text-xs whitespace-nowrap tracking-tight rounded-full px-2.5 py-0.5 flex-shrink-0"
+                    class="font-extrabold text-xs whitespace-nowrap tracking-tight rounded-full px-2 py-0.5 flex-shrink-0"
                     style="background-color: var(--theme-primary-light); color: var(--theme-primary);"
                   >
                     ${formatPrice(item.price, currentLang)}
@@ -957,7 +957,7 @@
                   <button 
                     onclick="toggleAccordion('${item.id}')"
                     id="btn-accordion-${item.id}"
-                    class="text-[11px] text-amber-700 hover:text-amber-800 font-semibold inline-flex items-center gap-1 group focus:outline-none flex-shrink-0"
+                    class="text-[10.5px] sm:text-[11px] text-amber-700 hover:text-amber-800 font-semibold inline-flex items-center gap-1 group focus:outline-none flex-shrink-0"
                     aria-expanded="false"
                   >
                     <span>${ui.aboutBtn}</span>
@@ -988,7 +988,7 @@
                   ` : `
                     <button 
                       onclick="updateCart('${item.id}', 1)" 
-                      class="inline-flex items-center gap-1 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-2xs transition-all whitespace-nowrap flex-shrink-0"
+                      class="inline-flex items-center gap-1 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-bold text-[10.5px] px-2 py-0.5 rounded-full shadow-2xs transition-all whitespace-nowrap flex-shrink-0"
                     >
                       <span>${ui.addToOrder}</span>
                     </button>
