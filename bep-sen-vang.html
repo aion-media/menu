@@ -258,8 +258,120 @@
       </div>
     </div>
 
-    <p class="text-[10px] text-stone-400 pt-1">© 2026 Bếp Sen Vàng • Digital Mobile Menu Mobile-First</p>
+    <div class="text-[10px] text-stone-400 pt-1 flex flex-col sm:flex-row items-center justify-between gap-1">
+      <span>© 2026 Bếp Sen Vàng • Digital Mobile Menu</span>
+      <a href="https://synaptiqlab.tech/#pricing" target="_blank" rel="noopener noreferrer" class="opacity-75 hover:opacity-100 hover:text-amber-700 underline underline-offset-2 transition-opacity">Сайт создан на архитектуре PulseCore by SYNAPTIQ Lab</a>
+    </div>
   </footer>
+
+  <!-- FLOATING ORDER SHEET BAR (Плавающая плашка заказа со стола) -->
+  <div 
+    id="floating-order-bar" 
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-20px)] max-w-md z-40 transition-all duration-300 transform translate-y-32 opacity-0 pointer-events-none"
+  >
+    <div class="bg-[#2E1C0F]/95 backdrop-blur-md text-white rounded-2xl p-2.5 px-3.5 shadow-[0_12px_36px_rgba(46,28,15,0.45)] border border-amber-500/35 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="relative flex-shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-amber-500 text-amber-950 font-black text-sm flex items-center justify-center shadow-xs">
+            🍜
+          </div>
+          <span id="floating-cart-badge" class="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full flex items-center justify-center border border-white">
+            0
+          </span>
+        </div>
+        <div class="min-w-0">
+          <p id="floating-cart-count" class="text-[11px] text-amber-200/90 font-medium leading-tight truncate">
+            0 món đã chọn
+          </p>
+          <p id="floating-cart-total" class="font-extrabold text-[15px] text-white tracking-tight leading-tight mt-0.5">
+            0 đ
+          </p>
+        </div>
+      </div>
+
+      <button 
+        onclick="openOrderModal()" 
+        class="flex-shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs shadow-md active:scale-95 transition-all flex items-center gap-1.5"
+      >
+        <span>📄</span>
+        <span id="floating-cart-btn-text">Xem đơn gọi món</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ORDER SHEET MODAL (Заказ для официанта с крупным вьетнамским названием) -->
+  <div 
+    id="order-modal" 
+    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-200"
+    onclick="handleModalBackdropClick(event)"
+  >
+    <div class="bg-[#FAF7F2] w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[88vh] flex flex-col shadow-2xl overflow-hidden border border-amber-900/10">
+      
+      <!-- Modal Header -->
+      <div class="px-4 py-3 bg-white border-b border-stone-200 flex items-start justify-between gap-2 flex-shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold text-[10px] tracking-wider uppercase mb-1">
+            <span>🇻🇳</span>
+            <span id="modal-badge-title">ĐƠN GỌI MÓN (CHO PHỤC VỤ)</span>
+          </div>
+          <h3 id="modal-heading" class="font-serif font-black text-base text-stone-900 leading-tight">
+            Đơn món của bạn
+          </h3>
+          <p id="modal-subheading" class="text-[11px] text-stone-500 leading-tight mt-0.5">
+            Vui lòng đưa màn hình này cho nhân viên phục vụ để gọi món
+          </p>
+        </div>
+        <button 
+          onclick="closeOrderModal()" 
+          class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all active:scale-90"
+          title="Đóng"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Items List -->
+      <div id="modal-items-list" class="p-4 overflow-y-auto space-y-3 flex-1 divide-y divide-stone-200/70">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-white border-t border-stone-200 space-y-2.5 flex-shrink-0">
+        <!-- Total Row -->
+        <div class="flex items-center justify-between text-stone-800">
+          <span id="modal-total-label" class="text-xs font-semibold text-stone-600">Tổng cộng:</span>
+          <span id="modal-total-val" class="text-lg font-black text-amber-700">0 đ</span>
+        </div>
+
+        <!-- Waiter tip alert -->
+        <div class="rounded-xl p-2 bg-emerald-50 border border-emerald-200 flex items-center gap-2 text-emerald-800 text-[11px]">
+          <span class="text-base flex-shrink-0">👨‍🍳</span>
+          <p id="modal-waiter-tip" class="leading-tight font-medium">
+            Nhân viên phục vụ có thể đọc tên món tiếng Việt bên dưới để ghi phiếu
+          </p>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex items-center gap-2 pt-0.5">
+          <button 
+            onclick="clearCart()" 
+            id="modal-clear-btn"
+            class="px-3 py-2 text-xs text-stone-500 hover:text-red-600 font-semibold transition-colors"
+          >
+            Xóa đơn
+          </button>
+          <button 
+            onclick="closeOrderModal()" 
+            id="modal-close-btn"
+            class="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm transition-all active:scale-95 text-center"
+          >
+            Thêm món khác
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- DATA & LOGIC SCRIPT -->
   <script>
@@ -601,7 +713,19 @@
         aionSupported: "Thực đơn được tạo với sự hỗ trợ của AION",
         aionTitle: "Ứng dụng tiện ích cuộc sống nước ngoài",
         aionDesc: "Tất cả địa điểm, dịch vụ và tiện ích tại một nơi",
-        aionBtn: "Mở AION"
+        aionBtn: "Mở AION",
+        addToOrder: "+ Gọi món",
+        inOrder: "Đã chọn",
+        showOrderBtn: "Xem đơn gọi món",
+        itemsCount: "món",
+        modalBadge: "ĐƠN GỌI MÓN (CHO PHỤC VỤ)",
+        modalHeading: "Đơn món của bạn",
+        modalSubtitle: "Vui lòng đưa màn hình này cho nhân viên phục vụ để gọi món chính xác",
+        orderTotal: "Tổng cộng:",
+        clearOrder: "Xóa đơn",
+        closeModal: "Thêm món khác",
+        emptyOrder: "Chưa có món nào được chọn",
+        waiterTip: "Nhân viên phục vụ có thể đọc tên món tiếng Việt bên dưới để ghi phiếu"
       },
       ru: {
         currency: "VND",
@@ -613,7 +737,19 @@
         aionSupported: "Меню создано при поддержке AION",
         aionTitle: "Приложение для жизни за границей",
         aionDesc: "Все места, услуги, сервисы в одном месте",
-        aionBtn: "Открыть AION"
+        aionBtn: "Открыть AION",
+        addToOrder: "+ В заказ",
+        inOrder: "В заказе",
+        showOrderBtn: "Показать заказ официанту",
+        itemsCount: "блюд(а)",
+        modalBadge: "ĐƠN GỌI MÓN (ЗАКАЗ ДЛЯ ОФИЦИАНТА)",
+        modalHeading: "Ваш выбранный заказ",
+        modalSubtitle: "Покажите этот экран официанту — все названия продублированы крупно на вьетнамском",
+        orderTotal: "Общая сумма:",
+        clearOrder: "Очистить",
+        closeModal: "Выбрать ещё блюда",
+        emptyOrder: "В заказе пока нет выбранных блюд",
+        waiterTip: "Официант быстро поймёт заказ по крупным вьетнамским названиям"
       },
       en: {
         currency: "VND",
@@ -625,7 +761,19 @@
         aionSupported: "Menu powered by AION",
         aionTitle: "Essential app for living abroad",
         aionDesc: "All places, services, and local utilities in one place",
-        aionBtn: "Open AION"
+        aionBtn: "Open AION",
+        addToOrder: "+ Add to order",
+        inOrder: "In order",
+        showOrderBtn: "Show order to waiter",
+        itemsCount: "items",
+        modalBadge: "ĐƠN GỌI MÓN (ORDER FOR WAITER)",
+        modalHeading: "Your Order Sheet",
+        modalSubtitle: "Show this screen to your waiter — full Vietnamese names displayed for kitchen",
+        orderTotal: "Total amount:",
+        clearOrder: "Clear all",
+        closeModal: "Add more dishes",
+        emptyOrder: "No items in your order yet",
+        waiterTip: "Waiters can easily read the large Vietnamese dish names"
       },
       zh: {
         currency: "越南盾",
@@ -637,7 +785,19 @@
         aionSupported: "本菜单由 AION 鼎力支持制作",
         aionTitle: "海外旅居生活必备应用",
         aionDesc: "汇聚周边全部地点、服务与优质设施",
-        aionBtn: "打开 AION"
+        aionBtn: "打开 AION",
+        addToOrder: "+ 加入点单",
+        inOrder: "已选",
+        showOrderBtn: "向服务员出示订单",
+        itemsCount: "道菜品",
+        modalBadge: "ĐƠN GỌI MÓN (出示给服务员)",
+        modalHeading: "已选点单清单",
+        modalSubtitle: "请直接向服务员出示此页面，已清晰标明越南语原名",
+        orderTotal: "总计金额:",
+        clearOrder: "清空",
+        closeModal: "继续加菜",
+        emptyOrder: "暂未选择任何菜品",
+        waiterTip: "服务员可直接对照大字号越南语名称精准下单"
       }
     };
 
@@ -740,6 +900,7 @@
 
       container.innerHTML = filtered.map(item => {
         const trans = item.translations[currentLang] || item.translations.vi;
+        const qty = orderCart[item.id] || 0;
         return `
           <article class="modern-card rounded-[20px] p-3 transition-all duration-200">
             <!-- Row layout: Image left strictly 4:3, details right -->
@@ -791,12 +952,12 @@
                   ${trans.desc}
                 </p>
 
-                <!-- Accordion Toggle Button (Hashtags removed) -->
-                <div class="mt-1.5 pt-0.5 flex items-center justify-between">
+                <!-- Accordion Toggle Button & Quick Order Counter -->
+                <div class="mt-2 pt-1.5 flex items-center justify-between gap-1 border-t border-stone-100/80">
                   <button 
                     onclick="toggleAccordion('${item.id}')"
                     id="btn-accordion-${item.id}"
-                    class="text-[11px] text-amber-700 hover:text-amber-800 font-semibold inline-flex items-center gap-1 group focus:outline-none"
+                    class="text-[11px] text-amber-700 hover:text-amber-800 font-semibold inline-flex items-center gap-1 group focus:outline-none flex-shrink-0"
                     aria-expanded="false"
                   >
                     <span>${ui.aboutBtn}</span>
@@ -804,6 +965,34 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
+
+                  <!-- Quick Add Button / Counter (Compact & Tactile) -->
+                  ${qty > 0 ? `
+                    <div class="inline-flex items-center gap-1 bg-amber-50 border border-amber-300 rounded-full p-0.5 px-1.5 shadow-2xs flex-shrink-0">
+                      <button 
+                        onclick="updateCart('${item.id}', -1)" 
+                        class="w-5 h-5 rounded-full bg-white text-stone-700 font-bold flex items-center justify-center hover:bg-stone-100 active:scale-90 transition-all text-xs border border-stone-200 shadow-3xs" 
+                        title="Уменьшить"
+                      >
+                        -
+                      </button>
+                      <span class="font-black text-amber-950 px-1 text-[11.5px] min-w-[14px] text-center">${qty}</span>
+                      <button 
+                        onclick="updateCart('${item.id}', 1)" 
+                        class="w-5 h-5 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center hover:bg-amber-700 active:scale-90 transition-all text-xs shadow-3xs" 
+                        title="Добавить"
+                      >
+                        +
+                      </button>
+                    </div>
+                  ` : `
+                    <button 
+                      onclick="updateCart('${item.id}', 1)" 
+                      class="inline-flex items-center gap-1 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-2xs transition-all whitespace-nowrap flex-shrink-0"
+                    >
+                      <span>${ui.addToOrder}</span>
+                    </button>
+                  `}
                 </div>
               </div>
             </div>
@@ -849,6 +1038,178 @@
       }
     }
 
+    // ==========================================
+    // ORDER SHEET & CART LOGIC (Интерактивный заказ со стола)
+    // ==========================================
+    let orderCart = {};
+    let isOrderModalOpen = false;
+
+    function updateCart(itemId, delta) {
+      const current = orderCart[itemId] || 0;
+      const updated = current + delta;
+      if (updated <= 0) {
+        delete orderCart[itemId];
+      } else {
+        orderCart[itemId] = updated;
+      }
+      renderOrderFloatingBar();
+      renderMenu();
+      if (isOrderModalOpen) {
+        renderOrderModalContent();
+      }
+    }
+
+    function clearCart() {
+      orderCart = {};
+      closeOrderModal();
+      renderOrderFloatingBar();
+      renderMenu();
+    }
+
+    function getCartSummary() {
+      let count = 0;
+      let total = 0;
+      for (const [id, qty] of Object.entries(orderCart)) {
+        const item = menuData.find(i => i.id === id);
+        if (item) {
+          count += qty;
+          total += item.price * qty;
+        }
+      }
+      return { count, total };
+    }
+
+    function renderOrderFloatingBar() {
+      const bar = document.getElementById('floating-order-bar');
+      const badge = document.getElementById('floating-cart-badge');
+      const countEl = document.getElementById('floating-cart-count');
+      const totalEl = document.getElementById('floating-cart-total');
+      const btnText = document.getElementById('floating-cart-btn-text');
+      if (!bar) return;
+
+      const summary = getCartSummary();
+      const ui = translationsUI[currentLang];
+
+      if (summary.count > 0) {
+        bar.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+        bar.classList.add('translate-y-0', 'opacity-100');
+        badge.innerText = summary.count;
+        countEl.innerText = `${summary.count} ${ui.itemsCount} ${ui.inOrder}`;
+        totalEl.innerText = formatPrice(summary.total, currentLang);
+        btnText.innerText = ui.showOrderBtn;
+      } else {
+        bar.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+        bar.classList.remove('translate-y-0', 'opacity-100');
+      }
+    }
+
+    function openOrderModal() {
+      isOrderModalOpen = true;
+      const modal = document.getElementById('order-modal');
+      renderOrderModalContent();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOrderModal() {
+      isOrderModalOpen = false;
+      const modal = document.getElementById('order-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function handleModalBackdropClick(e) {
+      if (e.target.id === 'order-modal') {
+        closeOrderModal();
+      }
+    }
+
+    function renderOrderModalContent() {
+      const list = document.getElementById('modal-items-list');
+      const totalVal = document.getElementById('modal-total-val');
+      const totalLabel = document.getElementById('modal-total-label');
+      const badgeTitle = document.getElementById('modal-badge-title');
+      const heading = document.getElementById('modal-heading');
+      const subheading = document.getElementById('modal-subheading');
+      const waiterTip = document.getElementById('modal-waiter-tip');
+      const clearBtn = document.getElementById('modal-clear-btn');
+      const closeBtn = document.getElementById('modal-close-btn');
+
+      const ui = translationsUI[currentLang];
+      const summary = getCartSummary();
+
+      // UI Texts
+      badgeTitle.innerText = ui.modalBadge;
+      heading.innerText = ui.modalHeading;
+      subheading.innerText = ui.modalSubtitle;
+      totalLabel.innerText = ui.orderTotal;
+      totalVal.innerText = formatPrice(summary.total, currentLang);
+      waiterTip.innerText = ui.waiterTip;
+      clearBtn.innerText = ui.clearOrder;
+      closeBtn.innerText = ui.closeModal;
+
+      const cartEntries = Object.entries(orderCart);
+      if (cartEntries.length === 0) {
+        list.innerHTML = `
+          <div class="py-8 text-center space-y-2">
+            <span class="text-3xl">🍲</span>
+            <p class="text-stone-600 text-xs font-semibold">${ui.emptyOrder}</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = cartEntries.map(([id, qty]) => {
+        const item = menuData.find(i => i.id === id);
+        if (!item) return '';
+        const trans = item.translations[currentLang] || item.translations.vi;
+        const itemTotal = item.price * qty;
+
+        return `
+          <div class="py-2.5 first:pt-0 last:pb-0 flex items-start justify-between gap-3">
+            <div class="flex items-start gap-2.5 flex-1 min-w-0">
+              <span class="w-6 h-6 rounded-md bg-amber-500 text-amber-950 font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                ${qty}
+              </span>
+              <div class="flex-1 min-w-0">
+                <!-- КРУПНОЕ ВЬЕТНАМСКОЕ НАЗВАНИЕ ДЛЯ ОФИЦИАНТА -->
+                <p class="font-extrabold text-[14.5px] text-stone-900 leading-snug tracking-tight">
+                  ${item.vietnameseName}
+                </p>
+                <!-- НАЗВАНИЕ НА ВЫБРАННОМ ЯЗЫКЕ ГОСТЯ -->
+                <p class="text-[11.5px] text-stone-500 font-medium leading-tight mt-0.5">
+                  ${trans.name}
+                </p>
+                <p class="text-[11px] font-bold text-amber-800 mt-1">
+                  ${formatPrice(item.price, currentLang)} × ${qty} = ${formatPrice(itemTotal, currentLang)}
+                </p>
+              </div>
+            </div>
+
+            <!-- Кнопки регулировки количества в модалке -->
+            <div class="flex items-center gap-1.5 flex-shrink-0 pt-0.5">
+              <button 
+                onclick="updateCart('${item.id}', -1)"
+                class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center text-xs active:scale-90 transition-all border border-stone-200"
+                title="Уменьшить"
+              >
+                -
+              </button>
+              <button 
+                onclick="updateCart('${item.id}', 1)"
+                class="w-6 h-6 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold flex items-center justify-center text-xs active:scale-90 transition-all shadow-3xs"
+                title="Увеличить"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // LANGUAGE SWITCHER
     function changeLanguage(lang) {
       currentLang = lang;
@@ -884,9 +1245,13 @@
       const aionBtnEl = document.getElementById('aion-btn-text');
       if (aionBtnEl && ui.aionBtn) aionBtnEl.innerText = ui.aionBtn;
 
-      // Re-render categories & menu
+      // Re-render categories, menu & order components
       renderCategories();
       renderMenu();
+      renderOrderFloatingBar();
+      if (isOrderModalOpen) {
+        renderOrderModalContent();
+      }
     }
 
     // INITIALIZATION
